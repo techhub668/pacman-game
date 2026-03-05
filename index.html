@@ -229,9 +229,94 @@
             position: relative;
             display: inline-block;
         }
+
+        /* Nav buttons */
+        #nav-buttons {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 200;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: #7B2FBE;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            background: #9B4FDE;
+        }
+
+        /* Responsive scaling */
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        @media (max-width: 500px) {
+            #game-title { font-size: 1.6rem; margin: 8px 0 2px; }
+
+            #hud {
+                width: 100%;
+                max-width: 460px;
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+
+            #status-bar {
+                width: 100%;
+                max-width: 460px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+
+            #game-canvas {
+                max-width: calc(100vw - 16px);
+                height: auto !important;
+            }
+
+            .menu-title { font-size: 2rem; letter-spacing: 4px; margin-bottom: 15px; }
+            .menu-subtitle { font-size: 0.75rem; margin-bottom: 15px; }
+            .difficulty-section { margin-bottom: 15px; }
+            .difficulty-section h3 { font-size: 0.9rem; margin-bottom: 8px; }
+            .diff-btn { padding: 8px 14px; font-size: 0.85rem; }
+            .feature-list { font-size: 0.7rem; margin-top: 10px; line-height: 1.6; padding: 0 15px; }
+            .start-btn, .restart-btn { padding: 12px 35px; font-size: 1.1rem; }
+            .controls-info { font-size: 0.65rem; margin-top: 12px; }
+            .game-over-text, .win-text { font-size: 1.8rem; }
+            .game-over-score { font-size: 1.5rem; margin: 10px 0; }
+
+            .nav-btn { padding: 6px 10px; font-size: 0.7rem; }
+
+            #touch-controls { display: grid !important; grid-template-columns: 55px 55px 55px; grid-template-rows: 55px 55px; justify-content: center; margin-top: 8px; }
+            .touch-up { grid-column: 2; grid-row: 1; }
+            .touch-left { grid-column: 1; grid-row: 2; }
+            .touch-down { grid-column: 2; grid-row: 2; }
+            .touch-right { grid-column: 3; grid-row: 2; }
+        }
     </style>
 </head>
 <body>
+
+<!-- NAV BUTTONS -->
+<div id="nav-buttons">
+    <a class="nav-btn" href="https://webapp.cryptopassiveincome.xyz/" target="_blank" rel="noopener">More Apps</a>
+    <a class="nav-btn" href="https://cryptopassiveincome.xyz" target="_blank" rel="noopener">Home</a>
+</div>
 
 <!-- MENU SCREEN -->
 <div id="menu-screen">
@@ -282,6 +367,7 @@
 </div>
 
 <!-- GAME HUD -->
+<div id="game-container">
 <h1 id="game-title">PACMAN</h1>
 <div id="hud">
     <span>SCORE: <span id="score-display">0</span></span>
@@ -303,6 +389,7 @@
     <button class="touch-btn touch-down" ontouchstart="handleTouch('down')" onclick="handleTouch('down')">&#9660;</button>
     <button class="touch-btn touch-right" ontouchstart="handleTouch('right')" onclick="handleTouch('right')">&#9654;</button>
 </div>
+</div> <!-- end game-container -->
 
 <script>
 // ===== CONSTANTS & CONFIG =====
@@ -1162,6 +1249,21 @@ pacman = createPacman();
 ghosts = [];
 for (let i = 0; i < 4; i++) ghosts.push(createGhost(i));
 draw();
+
+// ===== RESPONSIVE CANVAS SCALING =====
+function resizeCanvas() {
+    const maxWidth = window.innerWidth - 16;
+    const nativeWidth = COLS * TILE;
+    if (maxWidth < nativeWidth) {
+        canvas.style.width = maxWidth + 'px';
+        canvas.style.height = (maxWidth / nativeWidth) * (ROWS * TILE) + 'px';
+    } else {
+        canvas.style.width = '';
+        canvas.style.height = '';
+    }
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 </script>
 
 </body>
